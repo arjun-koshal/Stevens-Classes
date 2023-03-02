@@ -17,32 +17,32 @@ This repository serves as a record for all courses I have taken at [Stevens Inst
 - MA 230 - Multivariate Calc & Optimization
 - QF 102 - Intro to Quantitative Finance II
 - QF 103 - Intro. to Financial Tools & Technology
-- QF 112 - Statistics in Quantitative Finance
+- QF 112 - [Statistics in Quantitative Finance](https://github.com/arjun-koshal/Stevens-Classes/tree/main/S21%20QF%20112)
 
 ### Semester 3: Fall 2021 (18 Credits)
 - BT 290 - Business Career Seminar
 - MA 134 - Discrete Mathematics
-- MA 410 - Differential Geometry
-- MA 441 - Intro to Mathematical Analysis
+- MA 410 - [Differential Geometry](https://github.com/arjun-koshal/Stevens-Classes/tree/main/F21%20MA%20410)
+- MA 441 - [Intro to Mathematical Analysis](https://github.com/arjun-koshal/Stevens-Classes/tree/main/F21%20MA%20441)
 - PE 277 - Phys. Edu: Soccer
 - PEP 111 - Mechanics
 - QF 200 - Financial Econometrics
-- QF 212 - Adv Probability and Stochastic Processes for QF
+- QF 212 - [Adv Probability and Stochastic Processes for QF](https://github.com/arjun-koshal/Stevens-Classes/tree/main/F21%20QF%20212)
 
 ### Semester 4: Spring 2022 (15 Credits)
 - BT 321 - Corporate Finance
-- MA 240 - Proofs and Refutations
+- MA 240 - [Proofs and Refutations](https://github.com/arjun-koshal/Stevens-Classes/tree/main/S22%20MA%20240)
 - PEP 112 - Electricity & Magnetism
-- QF 202 - Financial Time Series
-- QF 343 - Introduction Stochastic Calculus for QF
+- QF 202 - [Financial Time Series](https://github.com/arjun-koshal/Stevens-Classes/tree/main/S22%20QF%20202)
+- QF 343 - [Introduction Stochastic Calculus for QF](https://github.com/arjun-koshal/Stevens-Classes/tree/main/S22%20QF%20343)
 
 ### Semester 5: Fall 2022 (19 Credits)
-- CS 385 - Algorithms
+- CS 385 - [Algorithms](https://github.com/arjun-koshal/Stevens-Classes/tree/main/F22%20CS%20385)
 - FE 535 - Introduction Financial Risk Management
-- FE 570 - Market Microstructure Trading Strategies
-- FE 620 - Pricing and Hedging
+- FE 570 - [Market Microstructure Trading Strategies](https://github.com/arjun-koshal/Stevens-Classes/tree/main/F22%20FE%20570)
+- FE 620 - [Pricing and Hedging](https://github.com/arjun-koshal/Stevens-Classes/tree/main/F22%20FE%20620)
 - PEP 242 - Modern Physics
-- QF 301 - Adv Time Series Analysis & Machine Learning
+- QF 301 - [Adv Time Series Analysis & Machine Learning](https://github.com/arjun-koshal/Stevens-Classes/tree/main/F22%20QF%20301)
 
 ### Semester 6: Spring 2023 (19 Credits)
 - HPL 456 - Ethics of Business & Technology
