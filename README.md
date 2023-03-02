@@ -53,7 +53,7 @@ This repository serves as a record for all courses I have taken at [Stevens Inst
 - MA 346 - Numerical Methods
 - PEP 221 - Physics Lab I for Scientists
 
-### Future Courses
+## Future Courses
 
 ### Semester 7: Fall 2023 (TBD Credits)
 - CS 559 - Machine Learning: Fundamentals and Applications
