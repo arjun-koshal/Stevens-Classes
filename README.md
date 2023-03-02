@@ -72,7 +72,7 @@ This repository serves as a record for all courses I have taken at [Stevens Inst
 ### Raritan Valley Community College: Summer 2021 (12 Credits)
 - MATH 254 - Differential Equations -> MA 221 - Differential Equations
 - CHEM 103 - General Chemistry I -> CH 115/CH 116 - General Chemistry I/Chemistry Lab I
-- CHEM 104 - General Chemistry II -> CH 115/CH 116 - General Chemistry II/Chemistry Lab II
+- CHEM 104 - General Chemistry II -> CH 117/CH 118 - General Chemistry II/Chemistry Lab II
 - ACCT 101 - Financial Accounting -> BT 200 - Financial Accounting
 
 ### Raritan Valley Community College: Summer 2022 (12 Credits)
