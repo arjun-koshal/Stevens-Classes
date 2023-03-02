@@ -2,7 +2,7 @@
 This repository serves as a record for all courses I have taken at [Stevens Institute of Technology](https://stevens.edu). Classes are listed in the order they appear on my study plan.
 
 ### Semester 1: Fall 2020 (18 Credits)
-- QF 101 - Intro toQuantitative Finance I
+- QF 101 - Intro to Quantitative Finance I
 - QF 104 - Data Management in R
 - QF 106 - Fundamentals of Probability for Finance
 - CS 110 - Creative Prob Solving in Computing
