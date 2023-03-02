@@ -1,0 +1,361 @@
+---
+output: pdf_document
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+```
+
+
+# QF301.  Homework #4.
+
+
+## `r format(Sys.time(), "%Y-%m-%d")`
+
+
+I pledge on my honor that I have not given or received any unauthorized assistance on this assignment/examination. I further pledge that I have not copied any material from a book, article, the Internet or any other source except where I have expressly cited the source.
+
+By filling out the following fields, you are signing this pledge.  No assignment will get credit without being pledged.
+
+Name: Arjun Koshal
+
+CWID: 10459064
+
+Date: 11/05/2022
+
+
+# Instructions
+In this assignment, you should use R markdown to answer the questions below. Simply type your R code into embedded chunks as shown above.
+When you have completed the assignment, knit the document into a PDF file, and upload both the .pdf and .Rmd files to Canvas.
+```{r}
+CWID = 10459064 #Place here your Campus wide ID number, this will personalize
+#your results, but still maintain the reproducible nature of using seeds.
+#If you ever need to reset the seed in this assignment, use this as your seed
+#Papers that use -1 as this CWID variable will earn 0's so make sure you change
+#this value before you submit your work.
+personal = CWID %% 10000
+set.seed(personal)#You can reset the seed at any time in your code,
+#but please always set it to this seed.
+```
+# Question 1 (40pt)
+
+## Question 1.1
+Use the quantmod package to obtain the daily adjusted close prices 2 different stocks.  You should have at least two years of data for both assets.  You should inspect the dates for your data to make sure you are including everything appropriately.  Create a data frame of the daily log returns both both stocks along with the lagged returns (2 lags).  Also include the direction (positive or negative) for both stocks in the current time point (not lagged).  You may wish to remove the date from your data frame for later analysis. Print the first 6 lines of your data frame.  (You may use the same two stocks as in Homework 2 or 3.)
+
+## \textcolor{red}{Solution:} 
+```{r}
+library(quantmod)
+
+getSymbols(c("AMZN","TSLA"),from="2018-01-01",to="2021-12-31")
+
+rAMZN = dailyReturn(AMZN$AMZN.Adjusted,type="log")
+rTSLA = dailyReturn(TSLA$TSLA.Adjusted,type="log")
+
+rAMZN1 = as.numeric(lag(rAMZN,k=1))[-(1:2)]
+rAMZN2 = as.numeric(lag(rAMZN,k=2))[-(1:2)]
+rAMZN = as.numeric(rAMZN)[-(1:2)]
+rAMZN.dir = (rAMZN > 0) + 0
+rTSLA1 = as.numeric(lag(rTSLA,k=1))[-(1:2)]
+rTSLA2 = as.numeric(lag(rTSLA,k=2))[-(1:2)]
+rTSLA = as.numeric(rTSLA)[-(1:2)]
+rTSLA.dir = (rTSLA > 0) + 0
+
+df = data.frame(rAMZN,rAMZN.dir,rTSLA,rTSLA.dir,rAMZN1,rTSLA1,rAMZN2,rTSLA2)
+head(df)
+```
+
+
+
+## Question 1.2 
+Split your data into training and testing sets (80% training and 20% test).
+
+Run a logistic regression for the direction of one of your stock returns as a function of the lagged returns (2 lags) for both stocks.  This should be of the form $\log(p_{1,t}/(1-p_{1,t})) = \beta_0 + \beta_{1,1} r_{1,t-1} + \beta_{1,2} r_{1,t-2} + \beta_{2,1} r_{2,t-1} + \beta_{2,2} r_{2,t-2}$.
+Evaluate the performance of this model with the test accuracy and confusion matrix.
+
+## \textcolor{red}{Solution:} 
+```{r}
+train = sample(length(rAMZN),0.8*length(rAMZN),replace=FALSE)
+
+logistic.reg = glm(rAMZN.dir ~ rAMZN1 + rAMZN2 + rTSLA1 + rTSLA2 , data=df , subset=train , family=binomial)
+summary(logistic.reg)
+
+logistic.prob=predict(logistic.reg,df[-train,])
+
+logistic.pred=rep(0,length(logistic.prob))
+logistic.pred[logistic.prob>.5] = 1
+
+mean(logistic.pred==df$rAMZN.dir[-train])
+table(predict=logistic.pred , truth=df$rAMZN.dir[-train])
+```
+
+
+
+## Question 1.3
+Consider the same classification problem as in Question 1.2 but with a Naive Bayes classifier.
+Use the same train/test split as in Question 1.2.
+Evaluate the performance of this model with the test accuracy and confusion matrix.
+
+## \textcolor{red}{Solution:} 
+```{r}
+library("e1071")
+df.x = data.frame(rAMZN1,rTSLA1,rAMZN2,rTSLA2)
+
+nb = naiveBayes(df.x[train,] , df$rAMZN.dir[train])
+
+nb.prob = predict(nb , newdata=df.x[-train,] , type="raw")
+head(nb.prob)
+nb.pred = (nb.prob[,1] < nb.prob[,2])+0
+
+mean(nb.pred==df$rAMZN.dir[-train])
+table(predict=nb.pred , truth=df$rAMZN.dir[-train])
+
+nb.prob.train = predict(nb , newdata=df.x[train,] , type="raw")
+nb.pred.train = (nb.prob.train[,1] < nb.prob.train[,2]) + 0
+mean(nb.pred.train==df$rAMZN.dir[train])
+```
+
+
+
+## Question 1.4
+Consider the same classification problem as in Question 1.2 but with a Random Forest classifier with 300 trees and 2 predictors in each tree.
+Use the same train/test split as in Question 1.2.
+Evaluate the performance of this model with the test accuracy and confusion matrix.
+
+## \textcolor{red}{Solution:} 
+```{r}
+library(randomForest)
+
+rAMZN.factor = as.factor(rAMZN.dir)
+df.tree = data.frame(rAMZN.dir=rAMZN.factor , rAMZN1,rTSLA1,rAMZN2,rTSLA2)
+
+rf.class = randomForest(rAMZN.dir ~ .,data=df.tree,subset=train,mtry=2,ntree=300,importance=TRUE)
+rf.class
+
+rf.pred = predict(rf.class,newdata=df.tree[-train,])
+
+mean(rf.pred==df.tree$rAMZN.dir[-train])
+table(predict=rf.pred,truth=df.tree$rAMZN.dir[-train])
+
+rf.pred.train = predict(rf.class,newdata=df.tree[train,])
+mean(rf.pred.train==df$rAMZN.dir[train])
+```
+
+
+## Question 1.5
+Consider the same classification problem as in Question 1.2 but with a neural network of your own design with at least 1 hidden layer and at least 3 hidden nodes.
+Use the same train/test split as in Question 1.2.
+Evaluate the performance of this model with the test accuracy and confusion matrix.
+
+## \textcolor{red}{Solution:} 
+```
+See python code
+```
+
+
+## Question 1.6
+Consider the same classification problem as in Question 1.2 but with a support vector machine using a radial basis kernel.
+Use the same train/test split as in Question 1.2.
+Evaluate the performance of this model with the test accuracy and confusion matrix.
+
+## \textcolor{red}{Solution:} 
+```{r}
+rAMZN.factor = as.factor(rAMZN.dir)
+df.svm = data.frame(rAMZN.dir=rAMZN.factor , rAMZN1,rTSLA1,rAMZN2,rTSLA2)
+
+tune.out = tune(svm,rAMZN.dir ~ .,data=df.svm[train,],kernel="radial",ranges=list(cost=c(0.001,.01,.1,1,5,10,100),gamma=c(.5,1,2,3,4)))
+summary(tune.out)
+
+best.svm.class = tune.out$best.model
+best.svm.class$cost
+best.svm.class$gamma
+summary(best.svm.class)
+
+best.svm.pred=predict(best.svm.class,newdata = df.svm[-train,])
+
+mean((best.svm.pred==df.svm$rAMZN.dir[-train]))
+table(predict=best.svm.pred,truth=df.svm$rAMZN.dir[-train])
+
+best.svm.pred.train = predict(best.svm.class,newdata = df.svm[train,])
+mean(best.svm.pred.train==df$rAMZN.dir[train])
+```
+
+
+# Question 2 (10pt)
+## Question 2.1
+Of the methods considered in Question 1, which would you recommend in practice?
+Explain briefly (1 paragraph) why you choose this fit.
+
+## \textcolor{red}{Solution:} 
+Though Random forest appears to have performed the best for me in the test data, it has a training accuracy of 100%.  This gives strong indications of overfitting and could result in poor performance on other (new) data.  Instead, I would recommend the neural network even though SVM has slightly higher test accuracy.  This is because the neural network provides more balanced predictions.
+
+Random forest performed the best for me in the test data; however, it has a training accuracy of 100%.
+This probably means that the data was overfitting and would most likely imply poor performance on other data
+
+
+
+# Question 3 (40pt)
+
+## Question 3.1
+Using the same data as in Question 1.1, partition the predicted (current) stock returns into 5 possible "market directions".  Add this data to your data frame and print the first 6 lines.
+Briefly (2-3 sentences) justify the choices of cutoff levels for the partitioning.
+
+## \textcolor{red}{Solution:}
+
+```{r}
+quantile(rAMZN,c(0.2,0.4,0.6,0.8))
+
+rAMZN.dir5 = rep("DDown",length(rAMZN.dir))
+rAMZN.dir5[rAMZN > -0.01] = "Down"
+rAMZN.dir5[rAMZN > -0.0025] = "Flat"
+rAMZN.dir5[rAMZN > 0.0025] = "Up"
+rAMZN.dir5[rAMZN > 0.01] = "UUp"
+
+sum(rAMZN.dir5 == "DDown")
+sum(rAMZN.dir5 == "Down")
+sum(rAMZN.dir5 == "Flat")
+sum(rAMZN.dir5 == "Up")
+sum(rAMZN.dir5 == "UUp")
+
+df = data.frame(rAMZN,rAMZN.dir,rAMZN.dir5,rTSLA,rTSLA.dir,rAMZN1,rTSLA1,rAMZN2,rTSLA2)
+head(df)
+```
+
+
+## Question 3.2
+Run a logistic regression for the generalized directions produced in Question 1.1 of one of your stock returns as a function of the lagged returns (2 lags) for both stocks.  
+Use the same train/test split as in Question 1.2.
+Evaluate the performance of this model with the test accuracy and confusion matrix.
+
+## \textcolor{red}{Solution:}
+
+```{r}
+library(nnet)
+
+logistic.reg = multinom(rAMZN.dir5 ~ rAMZN1 + rAMZN2 + rTSLA1 + rTSLA2 , data=df , subset = train)
+summary(logistic.reg)
+
+logistic.pred = predict(logistic.reg , newdata = df[-train,])
+
+mean(logistic.pred==df$rAMZN.dir5[-train]) # Test accuracy
+table(predict=logistic.pred , truth=df$rAMZN.dir5[-train]) # Confusion matrix of results
+
+logistic.pred.train = predict(logistic.reg , newdata = df[train,])
+mean(logistic.pred.train==df$rAMZN.dir5[train])
+```
+
+
+
+## Question 3.3
+Consider the same classification problem as in Question 3.2 but with a Naive Bayes classifier.
+Use the same train/test split as in Question 1.2.
+Evaluate the performance of this model with the test accuracy and confusion matrix.
+
+## \textcolor{red}{Solution:}
+
+```{r}
+nb = naiveBayes(df.x[train,] , df$rAMZN.dir5[train])
+
+nb.prob = predict(nb , newdata=df.x[-train,] , type="raw")
+head(nb.prob)
+max.prob = pmax(nb.prob[,1],nb.prob[,2],nb.prob[,3],nb.prob[,4],nb.prob[,5])
+
+nb.pred = rep("DDown",length(max.prob))
+nb.pred[nb.prob[,1] == max.prob] = "DDown"
+nb.pred[nb.prob[,2] == max.prob] = "Down"
+nb.pred[nb.prob[,3] == max.prob] = "Flat"
+nb.pred[nb.prob[,4] == max.prob] = "Up"
+nb.pred[nb.prob[,5] == max.prob] = "UUp"
+
+mean(nb.pred==df$rAMZN.dir5[-train]) #Test accuracy
+table(pred=nb.pred , true=df$rAMZN.dir5[-train]) #Test confusion matrix
+
+nb.prob.train = predict(nb , newdata=df.x[train,] , type="raw")
+max.prob.train = pmax(nb.prob.train[,1],nb.prob.train[,2],nb.prob.train[,3],nb.prob.train[,4],nb.prob.train[,5])
+nb.pred.train = rep("DDown",length(max.prob.train))
+
+nb.pred.train[nb.prob.train[,1] == max.prob.train] = "DDown"
+nb.pred.train[nb.prob.train[,2] == max.prob.train] = "Down"
+nb.pred.train[nb.prob.train[,3] == max.prob.train] = "Flat"
+nb.pred.train[nb.prob.train[,4] == max.prob.train] = "Up"
+nb.pred.train[nb.prob.train[,5] == max.prob.train] = "UUp"
+mean(nb.pred.train==df$rAMZN.dir5[train])
+```
+
+
+## Question 3.4
+Consider the same classification problem as in Question 3.2 but with a Random Forest classifier with 300 trees and 2 predictors in each tree.
+Use the same train/test split as in Question 1.2.
+Evaluate the performance of this model with the test accuracy and confusion matrix.
+
+## \textcolor{red}{Solution:}
+
+```{r}
+rAMZN.factor = as.factor(rAMZN.dir5)
+df.tree = data.frame(rAMZN.dir5=rAMZN.factor , rAMZN1,rTSLA1,rAMZN2,rTSLA2)
+
+rf.class = randomForest(rAMZN.dir5 ~ .,data=df.tree,subset=train,mtry=2,ntree=300,importance=TRUE)
+rf.class
+
+rf.pred = predict(rf.class,newdata=df.tree[-train,])
+
+mean(rf.pred==df.tree$rAMZN.dir5[-train])
+table(predict=rf.pred,truth=df.tree$rAMZN.dir5[-train])
+
+rf.pred.train = predict(rf.class,newdata=df.tree[train,])
+mean(rf.pred.train==df$rAMZN.dir5[train])
+```
+
+
+
+## Question 3.5
+Consider the same classification problem as in Question 3.2 but with a neural network of your own design with at least 1 hidden layer and at least 3 hidden nodes.
+Use the same train/test split as in Question 1.2.
+Evaluate the performance of this model with the test accuracy and confusion matrix.
+
+## \textcolor{red}{Solution:}
+
+```
+See python code
+```
+
+
+
+## Question 3.6
+Consider the same classification problem as in Question 3.2 but with a support vector machine using a radial basis kernel.
+Use the same train/test split as in Question 1.2.
+Evaluate the performance of this model with the test accuracy and confusion matrix.
+
+## \textcolor{red}{Solution:}
+
+```{r}
+rAMZN.factor = as.factor(rAMZN.dir5)
+df.svm = data.frame(rAMZN.dir5=rAMZN.factor , rAMZN1,rTSLA1,rAMZN2,rTSLA2)
+
+tune.out = tune(svm,rAMZN.dir5 ~ ., data=df.svm[train,],kernel="radial",ranges=list(cost=c(0.001,.01,.1,1,5,10,100),gamma=c(.5,1,2,3,4)))
+summary(tune.out)
+
+best.svm.class = tune.out$best.model
+best.svm.class$cost
+best.svm.class$gamma 
+summary(best.svm.class)
+
+best.svm.pred=predict(best.svm.class,newdata = df.svm[-train,])
+
+mean((best.svm.pred==df.svm$rAMZN.dir5[-train])) 
+table(predict=best.svm.pred,truth=df.svm$rAMZN.dir5[-train]) 
+
+best.svm.pred.train = predict(best.svm.class,newdata = df.svm[train,])
+mean(best.svm.pred.train==df$rAMZN.dir5[train])
+```
+
+
+
+
+# Question 4 (10pt)
+## Question 4.1
+Of the methods considered in Question 3, which would you recommend in practice?
+Explain briefly (1 paragraph) why you choose this fit.
+
+## \textcolor{red}{Solution:} 
+Neural network appears to be the best since the accuracy is the best.
+

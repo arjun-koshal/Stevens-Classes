@@ -1,0 +1,200 @@
+---
+output: pdf_document
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+```
+
+
+
+# QF301.  Homework #5.
+
+
+## `r format(Sys.time(), "%Y-%m-%d")`
+
+
+I pledge on my honor that I have not given or received any unauthorized assistance on this assignment/examination. I further pledge that I have not copied any material from a book, article, the Internet or any other source except where I have expressly cited the source.
+
+By filling out the following fields, you are signing this pledge.  No assignment will get credit without being pledged.
+
+Name: Arjun Koshal
+
+CWID: 10459064
+
+Date: 11/30/2022
+
+
+# Instructions
+In this assignment, you should use R markdown to answer the questions below. Simply type your R code into embedded chunks as shown above.
+When you have completed the assignment, knit the document into a PDF file, and upload both the .pdf and .Rmd files to Canvas.
+If you use Python, you will need to include your .ipynb and prinout as .pdf as well.
+```{r}
+CWID = 10459064 #Place here your Campus wide ID number, this will personalize
+#your results, but still maintain the reproducible nature of using seeds.
+#If you ever need to reset the seed in this assignment, use this as your seed
+#Papers that use -1 as this CWID variable will earn 0's so make sure you change
+#this value before you submit your work.
+personal = CWID %% 10000
+set.seed(personal)#You can reset the seed at any time in your code,
+#but please always set it to this seed.
+```
+# Question 1 (100pt)
+In this assignment, you will be required to find a set of data to run a regression or classification on. 
+
+## Question 1.1 (10pt)
+For this task, use the quantmod package to obtain the daily adjusted close prices of at least 3 different stocks. You should have at least 5 years of data for all assets. You should inspect the dates to make sure you are including everything appropriately. 
+Find the daily log returns of all stocks along with (at least) 3 lags for each stock.
+Create a data frame of your desired output (whether as a regression of returns or classification) and the lagged returns. Print the first 6 lines of your data frame.
+
+## \textcolor{red}{Solution:} 
+```{r}
+library(quantmod)
+
+getSymbols(c("AMZN", "MSFT", "TSLA"),from="2017-11-15",to="2022-11-16")
+
+rAMZN = as.numeric(dailyReturn(AMZN$AMZN.Adjusted,type="log"))
+rMSFT = as.numeric(dailyReturn(MSFT$MSFT.Adjusted,type="log"))
+rTSLA = as.numeric(dailyReturn(TSLA$TSLA.Adjusted,type="log"))
+
+rAMZN1 = as.numeric(lag(rAMZN,k=1))[-(1:3)]
+rAMZN2 = as.numeric(lag(rAMZN,k=2))[-(1:3)]
+rAMZN3 = as.numeric(lag(rAMZN,k=3))[-(1:3)]
+rAMZN = as.numeric(rAMZN)[-(1:3)]
+rAMZN.dir = (rAMZN > 0) + 0
+
+rMSFT1 = as.numeric(lag(rMSFT,k=1))[-(1:3)]
+rMSFT2 = as.numeric(lag(rMSFT,k=2))[-(1:3)]
+rMSFT3 = as.numeric(lag(rMSFT,k=3))[-(1:3)]
+rMSFT = as.numeric(rMSFT)[-(1:3)]
+rMSFT.dir = (rMSFT > 0) + 0
+
+rTSLA1 = as.numeric(lag(rTSLA,k=1))[-(1:3)]
+rTSLA2 = as.numeric(lag(rTSLA,k=2))[-(1:3)]
+rTSLA3 = as.numeric(lag(rTSLA,k=3))[-(1:3)]
+rTSLA = as.numeric(rTSLA)[-(1:3)]
+rTSLA.dir = (rTSLA > 0) + 0
+
+df = data.frame(rAMZN,rAMZN.dir,rMSFT,rMSFT.dir,rTSLA,rTSLA.dir,
+                rAMZN1,rMSFT1,rTSLA1,rAMZN2,rMSFT2,
+                rTSLA2,rAMZN3,rMSFT3,rTSLA3)
+head(df)
+```
+
+
+
+## Question 1.2 (10pt)
+Provide a description of the data below: what is your desired prediction and why do you think your data will aid in this task?
+
+## \textcolor{red}{Solution:} 
+```
+The data consists of 5 year stock prices of Amazon, Microsoft, and Tesla. The goal is to see from 4 different models,
+which is the best model that fits the data. The data will aid in the task because we have sufficient amount of data
+from 5 years and we can solve the classification problem.
+```
+
+
+
+## Question 1.3 (60pt)
+Fit at least four different models in order to run your prediction. You will need to confirm the models you try are as good a fit as you can find for that model type (i.e., feature selection or cross-validation to find model hyperparameters). You need to convince the grader that you have chosen the best model fits, so provide comments as to why you choose the models you use.
+
+If you use neural networks, make reference in your solution below and provide the Python code with your submission.
+
+## \textcolor{red}{Solution:}
+### \textcolor{red}{Model 1:}
+```{r}
+# Logistic Regression
+train = sample(length(rAMZN),0.8*length(rAMZN),replace=FALSE)
+
+logistic.reg = glm(rAMZN.dir ~ rAMZN1 + rAMZN2 + rMSFT1 + rMSFT2 + rTSLA1 + 
+                     rTSLA2, data=df, subset=train, family=binomial)
+summary(logistic.reg)
+
+logistic.prob=predict(logistic.reg,df[-train,])
+
+logistic.pred=rep(0,length(logistic.prob))
+logistic.pred[logistic.prob>.5] = 1
+
+table(predict=logistic.pred , truth=df$rAMZN.dir[-train])
+mean(logistic.pred==df$rAMZN.dir[-train])
+```
+
+### \textcolor{red}{Model 2:}
+```{r}
+# Naive Bayes Classifier
+library("e1071")
+df.x = data.frame(rAMZN1,rMSFT1,rTSLA1,rAMZN2,rMSFT2,rTSLA2)
+
+nb = naiveBayes(df.x[train,] , df$rAMZN.dir[train])
+
+nb.prob = predict(nb , newdata=df.x[-train,] , type="raw")
+head(nb.prob)
+nb.pred = (nb.prob[,1] < nb.prob[,2])+0
+
+mean(nb.pred==df$rAMZN.dir[-train])
+table(predict=nb.pred , truth=df$rAMZN.dir[-train])
+
+nb.prob.train = predict(nb , newdata=df.x[train,] , type="raw")
+nb.pred.train = (nb.prob.train[,1] < nb.prob.train[,2]) + 0
+mean(nb.pred.train==df$rAMZN.dir[train])
+```
+
+### \textcolor{red}{Model 3:}
+```{r}
+# Random Forest classifier with 300 trees and 2 predictors in each tree
+library(randomForest)
+
+rAMZN.factor = as.factor(rAMZN.dir)
+df.tree = data.frame(rAMZN.dir=rAMZN.factor , rAMZN1,rMSFT1,rTSLA1,rAMZN2,
+                     rMSFT2,rTSLA2)
+
+rf.class = randomForest(rAMZN.dir ~ .,data=df.tree,subset=train,mtry=2,
+                        ntree=300,importance=TRUE)
+rf.class
+
+rf.pred = predict(rf.class,newdata=df.tree[-train,])
+
+mean(rf.pred==df.tree$rAMZN.dir[-train])
+table(predict=rf.pred,truth=df.tree$rAMZN.dir[-train])
+
+rf.pred.train = predict(rf.class,newdata=df.tree[train,])
+mean(rf.pred.train==df$rAMZN.dir[train])
+```
+
+### \textcolor{red}{Model 4:}
+```{r}
+# Support vector machine using a radial basis kernel
+rAMZN.factor = as.factor(rAMZN.dir)
+df.svm = data.frame(rAMZN.dir=rAMZN.factor , rAMZN1,rMSFT1,rTSLA1,rAMZN2,
+                    rMSFT2,rTSLA2)
+
+tune.out = tune(svm,rAMZN.dir ~ .,data=df.svm[train,],kernel="radial",
+                ranges=list(cost=c(0.001,.01,.1,1,5,10,100),
+                            gamma=c(.5,1,2,3,4)))
+summary(tune.out)
+
+best.svm.class = tune.out$best.model
+best.svm.class$cost
+best.svm.class$gamma
+summary(best.svm.class)
+
+best.svm.pred=predict(best.svm.class,newdata = df.svm[-train,])
+
+mean((best.svm.pred==df.svm$rAMZN.dir[-train]))
+table(predict=best.svm.pred,truth=df.svm$rAMZN.dir[-train])
+
+best.svm.pred.train = predict(best.svm.class,newdata = df.svm[train,])
+mean(best.svm.pred.train==df$rAMZN.dir[train])
+```
+
+
+
+
+## Question 1.4 (20pt)
+Determine which of your four (or more) models is the best fit. You will need to provide strong reasons as to why the particular model you chose is the best one. You need to convince the grader that you have chosen the best model.
+
+## \textcolor{red}{Solution:} 
+
+Although Random forest appears to perform the best, it had a training accuracy of 100%. This implies that the training data
+was over fitting and could lead to poor performance on new data. I would recommend SVM due to the slightly lower training
+accuracy, and SVM provides more balanced predictions. 

@@ -1,0 +1,302 @@
+---
+output: pdf_document
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+```
+
+
+
+# QF301.  Homework #2.
+
+
+## `r format(Sys.time(), "%Y-%m-%d")`
+
+
+I pledge on my honor that I have not given or received any unauthorized assistance on this assignment/examination. I further pledge that I have not copied any material from a book, article, the Internet or any other source except where I have expressly cited the source.
+
+By filling out the following fields, you are signing this pledge.  No assignment will get credit without being pledged.
+
+Name: Arjun Koshal
+
+CWID: 10459064
+
+Date: 10/07/2022
+
+
+# Instructions
+In this assignment, you should use R markdown to answer the questions below. Simply type your R code into embedded chunks as shown above.
+When you have completed the assignment, knit the document into a PDF file, and upload both the .pdf and .Rmd files to Canvas.
+```{r}
+CWID = 10459064 #Place here your Campus wide ID number, this will personalize
+#your results, but still maintain the reproducible nature of using seeds.
+#If you ever need to reset the seed in this assignment, use this as your seed
+#Papers that use -1 as this CWID variable will earn 0's so make sure you change
+#this value before you submit your work.
+personal = CWID %% 10000
+set.seed(personal)#You can reset the seed at any time in your code,
+#but please always set it to this seed.
+```
+# Question 1 (20pt)
+
+## Question 1.1
+Use the quantmod package to obtain the daily adjusted close prices 2 different stocks.  You should have at least two years of data for both assets.  You should inspect the dates for your data to make sure you are including everything appropriately.  Create a data frame of the daily log returns both both stocks.  Print the first and last 6 lines of your data frame.
+
+## \textcolor{red}{Solution:} 
+```{r}
+library(quantmod)
+getSymbols("AMZN", from = "2019-01-01", to = "2021-12-31", src = "yahoo")
+getSymbols("TSLA", from = "2019-01-01", to = "2021-12-31", src = "yahoo")
+AMZN <- dailyReturn(AMZN$AMZN.Adjusted, type = "log")
+TSLA <- dailyReturn(TSLA$TSLA.Adjusted, type = "log")
+df <- data.frame(AMZN, TSLA)
+colnames(df) = c("AmazonReturns", "TeslaReturns")
+head(df, 6)
+tail(df, 6)
+```
+
+## Question 1.2 
+List the names of the variables in the data set.
+
+## \textcolor{red}{Solution:} 
+```{r}
+names(df)
+```
+
+
+## Question 1.3 
+As the date will be unimportant, remove that field from your data frame
+
+## \textcolor{red}{Solution:} 
+```{r}
+df2 <- data.frame(df, row.names = NULL)
+head(df2)
+```
+
+## Question 1.4 
+What is the mean and standard deviation of each variable? Create a simple table of the means and standard deviations.
+
+## \textcolor{red}{Solution:} 
+```{r}
+table <- matrix(c(mean(df2$AmazonReturns), sd(df2$AmazonReturns),
+mean(df2$TeslaReturns), sd(df2$TeslaReturns)), ncol = 2, byrow = FALSE)
+
+colnames(table) <- c("Amazon","Tesla")
+rownames(table) <- c("Mean", "Standard Deviation")
+table
+```
+
+
+
+## Question 1.5  
+Regress one of your stock returns as a function of the other (simultaneous data). This should be of the form $r_1 = \beta_0 + \beta_1 r_2$. (No train/test split is required here.)
+
+## \textcolor{red}{Solution:} 
+```{r}
+model <- lm(df$AmazonReturns~df$TeslaReturns)
+summary(model)
+```
+
+
+
+
+
+# Question 2 (40pt)
+
+
+## Question 2.1
+Using the data set that you loaded for the first problem, choose one of your stocks, and create a data frame consisting of lagged returns going up to 3 days back.
+
+## \textcolor{red}{Solution:} 
+```{r}
+r1 <- as.numeric(lag (AMZN, k = 1))[-(1:3)]
+r2 <- as.numeric(lag (AMZN, k = 2))[-(1:3)]
+r3 <- as.numeric(lag (AMZN, k = 3))[-(1:3)]
+r0 <- as.numeric(AMZN)[-(1:3)]
+df_lag <- data.frame(r0, r1, r2, r3)
+head(df_lag)
+```
+
+## Question 2.2 
+Split your data into a training set and a testing set (50% in each set). 
+Create an AR(1) model for your stock returns. Provide the test mean squared error.
+
+## \textcolor{red}{Solution:} 
+```{r}
+x1 <- as.numeric(lag(AMZN, k=1))[-(1:1)]
+y <- as.numeric(AMZN)[-(1:1)]
+df_ar1 <- data.frame(y, x1)
+length <- length(AMZN)
+
+train <- sample(length, length/2, replace = FALSE)
+ar1 = lm(y[train]~x1[train])
+summary(ar1)
+Ar1_Test = lm(y[-train]~x1[-train])
+
+MSE <- mean(Ar1_Test$residuals^2)
+MSE
+```
+
+## Question 2.3
+Evaluate if your AR(1) model is weakly stationary or unit-root nonstationary.
+
+## \textcolor{red}{Solution:} 
+
+```{r}
+summary(ar1)$coefficients
+b0 <- summary(ar1)$coefficients[1,1]
+b1 <- summary(ar1)$coefficients[2,1]
+b1.se <- summary(ar1)$coefficients[2,2]
+abs(b1) < 1
+t <- (b1 - 1)/b1.se
+t
+pnorm(t)
+```
+
+We can see from the fact the absolute value of b1 is less than 1 that
+model is weakly stationary.
+
+### (a) If your model is weakly stationary, provide the (long-run) average returns and autocovariances for your model.  How do these compare with the empirical values? If your model is (unit-root) nonstationary, please interpret your model.  Give as much detail as possible.
+
+### \textcolor{red}{Solution:} 
+
+```{r}
+mu <- b0 / (1 - b1)
+gamma0 <- MSE / (1 - b1^2)
+gamma1 <- b1*gamma0
+gamma2 <- b1*gamma1
+gamma3 <- b1*gamma2
+mean(AMZN) - mu
+cov(AMZN, AMZN) - gamma0
+cov(AMZN[-1], lag(AMZN, k = 1)[-1]) - gamma1
+cov(AMZN[-(1:2)], lag(AMZN, k = 2)[-(1:2)]) - gamma2
+cov(AMZN[-(1:3)], lag(AMZN, k = 3)[-(1:3)]) - gamma3
+```
+
+We can see that since the difference between the empirical and theoretical
+data is extremely small and near 0, that the empirical data is similar to the
+theoretical data.
+
+### (b) Provide the formulas for the 1- and 2- step ahead forecasts. What are the variances for these forecast errors?
+
+### \textcolor{red}{Solution:} 
+
+```{r}
+N <- length(df_ar1$y)
+sig <- sqrt(MSE)
+Hat_R <- matrix(nrow = length(df_ar1$y)-5, ncol = 5)
+e <- matrix(nrow = N - 5, ncol = 5)
+Var_e <- rep(NA, 5)
+Hat_R[,1] <- b0 + b1*df_ar1$y[1:(N-5)]
+e[,1] <- df_ar1$y[2:(N-4)] - Hat_R[,1]
+Var_e[1] <- sig^2
+for (l in seq(2,5)) {
+Hat_R[,l] <- b0 + b1*Hat_R[,l-1]
+e[,l] <- df_ar1$y[(l+1):(N-5+l)] - Hat_R[,l]
+Var_e[l] <- sig^2 + b1^2*Var_e[l-1]
+}
+
+Emp_e <- c(var(e[,1]),var(e[,2]),var(e[,3]),var(e[,4]),var(e[,5]))
+sqrt(Emp_e)
+```
+
+## Question 2.3
+Using the same train/test split as in Question 2.2. 
+Create an AR(3) model for your stock returns. Provide the test mean squared error.
+
+## \textcolor{red}{Solution:} 
+```{r}
+train_r0 = sample(length(r0), length(r0)/2, replace = FALSE)
+lin.mod = glm(r0~., data = df_lag, subset = train_r0)
+summary(lin.mod)
+pred = predict(lin.mod, df_lag[-train_r0,])
+MSE_ar3 = mean((pred-df_lag$r0[-train_r0])^2)
+MSE_ar3
+```
+
+## Question 2.4
+Using the same train/test split as in Question 2.2.
+Using Ridge regression, produce an AR(3) linear regression.  Find the optimal tuning parameter for this regression.  What is the test mean squared error?
+
+## \textcolor{red}{Solution:} 
+```{r}
+library(glmnet)
+x = model.matrix(r0~., df_lag)[,-1]
+y = df_lag$r0
+lambda = 10^seq(-2, 4, by = .01)
+ridge.mod = glmnet(x[train_r0,], y[train_r0], alpha = 0, lambda = lambda)
+cv.out = cv.glmnet(x[train_r0,], y[train_r0], alpha = 0, lambda = lambda)
+plot(cv.out)
+ridge.bestlam = cv.out$lambda.min
+ridge.bestlam
+bestridge.pred = predict(ridge.mod, s = ridge.bestlam, newx = x[-train_r0,])
+mean((bestridge.pred-y[-train_r0])^2)
+```
+
+## Question 2.5
+Using the same train/test split as in Question 2.2.
+Using LASSO regression, produce an AR(3) linear regression.  Find the optimal tuning parameter for this regression.  What is the test mean squared error?
+
+## \textcolor{red}{Solution:} 
+```{r}
+library(glmnet)
+lasso.mod = glmnet(x[train_r0,], y[train_r0], alpha = 1, lambda = lambda)
+cv.out = cv.glmnet(x[train_r0,], y[train_r0], alpha = 1, lambda = lambda)
+plot(cv.out)
+lasso.bestlam=cv.out$lambda.min
+lasso.bestlam
+bestlasso.pred = predict(lasso.mod, s = lasso.bestlam, newx = x[-train_r0,])
+mean((bestlasso.pred-y[-train_r0])^2)
+```
+
+## Question 2.6
+Briefly (1 paragraph or less) compare the coefficients for the three AR(3) regressions computed.
+
+## \textcolor{red}{Solution:} 
+```{r}
+summary(lin.mod)$coefficients
+ridgecoef = glmnet(x[train_r0,], y[train_r0], alpha = 0, lambda = lambda)
+predict(ridgecoef, type="coefficients", s = ridge.bestlam)
+lassocoef = glmnet(x[train_r0,], y[train_r0], alpha = 1, lambda = lambda)
+predict(lassocoef, type="coefficients", s = lasso.bestlam)
+```
+
+We can see that the LASSO regression coefficients are nearly the same, as all
+of them are very close to 0. The same can be said about the Ridge regression
+coefficients, as all of them are nearly 0 as well, exlcuding the intercept.
+From this we can infer that there is a weak historical relationship.
+
+# Question 3 (15pt)
+
+## Question 3.1
+Write a function that works in R (or python if submitting a Jupyter notebook) to gives you the parameters from a linear regression on a data set of $n$ predictors.  You can assume all the predictors and the prediction is numeric.  Include in the output the standard error of your variables.  You can**not** use the `lm` command in this function or any of the other built in regression models.  
+
+## \textcolor{red}{Solution:} 
+```{r}
+linear_regression = function(X, y) {
+  beta = solve(t(X) %*% X) %*% t(X) %*% y
+  sig2 = mean((y-X %*% beta)^2)
+  se = sig^2*solve(t(X) %*% X)
+  se = diag(se)
+  output = list(beta, se)
+  names(output) = c("beta","SE")
+  return(output)
+}
+```
+
+
+## Question 3.2
+Compare the output of your function to that of the `lm` command in R (or your favorite choice of built in linear regression function) on sample data. You may use the financial data from Questions 1 and 2 or examples from lecture notes.
+
+## \textcolor{red}{Solution:} 
+```{r}
+fit <- lm(AMZN ~ TSLA, df)
+fit
+linear_regression(TSLA, AMZN)
+```
+
+The output for the function created in 3.1 and the lm function are nearly the
+same.
+
+

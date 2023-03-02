@@ -1,0 +1,224 @@
+---
+output: pdf_document
+
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+```
+
+
+
+# QF301.  Homework #1.
+
+
+## `r format(Sys.time(), "%Y-%m-%d")`
+
+I pledge on my honor that I have not given or received any unauthorized assistance on this assignment/examination. I further pledge that I have not copied any material from a book, article, the Internet or any other source except where I have expressly cited the source.
+
+By filling out the following fields, you are signing this pledge.  No assignment will get credit without being pledged.
+
+Name: Arjun Koshal
+
+CWID: 10459064
+
+Date: 9/23/2022
+
+# Question 1 (20pt)
+
+## Question 1.1
+
+```{r}
+CWID = 10459064 #Place here your Campus wide ID number, this will personalize
+#your results, but still maintain the reproduceable nature of using seeds.
+#If you ever need to reset the seed in this assignment, use this as your seed
+#Papers that use -1 as this CWID variable will earn 0's so make sure you change
+#this value before you submit your work.
+personal = CWID %% 10000
+set.seed(personal)
+```
+
+An urn contains three type A coins and two type B coins. When a type A coin is flipped, it comes up heads with probability 1/3, whereas when a type B coin is flipped, it comes up heads with probability 2/3. A coin is randomly chosen (uniformly) from the urn and flipped. Given that the flip landed on heads, what is the probability that it was a type B coin?
+
+Hint: Recall Bayes' theorem.
+
+(Note that the following two fields can be added wherever you desire to show a solution.  You can use the first for a written response, and the second for showing R code and its output.  Some questions will require just one, and some both.  I will not always provide you with these, but you can add them at your discretion wherever necessary.  If it makes sense to do the R code first then that's fine.  If you want to include multiple of each, that's ok too.  Do what you feel is necessary to answer the question fully.)
+
+## \textcolor{red}{Solution:} 
+
+```{r}
+# Probability of choosing type A coin
+A = 3/5
+# Probability of choosing type B coin
+B = 2/5
+
+# Probability of Heads given A
+A_Heads = 1/3
+# Probability of Tails given A
+A_Tails = 2/3
+# Probability of Heads given B
+B_Heads = 2/3
+# Probability of Tails given B
+B_Tails = 1/3
+
+# Law of Total Probability
+total = (A_Heads * A) + (B_Heads * B)
+
+# Bayes' theorem
+x = (B_Heads*B)/(total)
+x * 100
+```
+
+The probability is 57.14% chance.
+
+## Question 1.2
+
+Simulate this system by sequentially sampling a coin and a flip. From 10,000 repeated simulations, what percentage of heads results came from a type B coin? Comment on your answer in comparison with the result you found in Question 1.1.
+
+## \textcolor{red}{Solution:}
+
+```{r}
+# Define two coins A and B and create a variable named simulation that creates
+# a sample of size 10000 with probability of 3/5 for coin A and 2/5 for coin B
+
+coin_A_B <- c("A", "B")
+simulation <- sample(coin_A_B, size = 10000, prob = c((3/5), (2/5)), 
+                     replace = TRUE)
+heads_tails_coin <- c("Heads", "Tails")
+
+# Initialize the variables A_Heads and B_Heads as counters and accumulate the 
+# values using a loop. Check which coin, A or B, is flipped and if the coin 
+# lands on heads, then add 1 to the respective counter
+
+A_Heads = 0
+B_Heads = 0
+
+for (x in simulation) {
+  if (x == "A") {
+    flip <- sample(heads_tails_coin, size = 1, prob = c((1/3), (2/3)), 
+                replace = FALSE)
+    if (flip == "Heads") {
+      A_Heads = A_Heads + 1
+    }
+  }
+  if (x == "B") {
+    flip <- sample(heads_tails_coin, size = 1, prob = c((2/3), (1/3)), 
+                replace = FALSE)
+    if (flip == "Heads") {
+      B_Heads = B_Heads + 1
+    }
+  }
+}
+
+(B_Heads/(A_Heads + B_Heads)) * 100
+```
+
+Around roughly 57.37% heads results came from a type B coin. The percentage 
+from Question 1.1 was 57.14%, so the answers are very close together.
+
+# Question 2 (10pt)
+
+## Question 2.1
+
+Generate a vector `x` containing 1,000 realizations of a random normal variable with mean 2 and variance 7. Plot a histogram of `x` using 35 bins.
+
+## \textcolor{red}{Solution:}
+
+```{r}
+x <- rnorm(1000, mean = 2, sd = sqrt(7))
+hist(x, breaks = 35)
+```
+
+## Question 2.2
+
+Calculate the mean and standard deviation of these 1,000 values. Do your answers make sense?
+
+## \textcolor{red}{Solution:}
+
+```{r}
+mean(x)
+sd(x)
+```
+
+Yes these numbers make sense since the mean is close to 2 and the standard
+deviation is close to the square root of 7.
+
+## Question 2.3
+
+Using the `sample` function, take out 10 random samples of 500 observations each (with replacement).  Create a vector of the means of each sample.  Calculate the mean of the sample means and the standard deviation of the sample means.  What do you observe about these results?
+
+## \textcolor{red}{Solution:}
+
+```{r}
+sample_1 <- sample(x, 500, replace = TRUE)
+sample_2 <- sample(x, 500, replace = TRUE)
+sample_3 <- sample(x, 500, replace = TRUE)
+sample_4 <- sample(x, 500, replace = TRUE)
+sample_5 <- sample(x, 500, replace = TRUE)
+sample_6 <- sample(x, 500, replace = TRUE)
+sample_7 <- sample(x, 500, replace = TRUE)
+sample_8 <- sample(x, 500, replace = TRUE)
+sample_9 <- sample(x, 500, replace = TRUE)
+sample_10 <- sample(x, 500, replace = TRUE)
+samples_means_vector <- c(mean(sample_1), mean(sample_2), mean(sample_3),
+mean(sample_4), mean(sample_5), mean(sample_6),
+mean(sample_7), mean(sample_8), mean(sample_9),
+mean(sample_10))
+
+mean(samples_means_vector)
+sd(samples_means_vector)
+```
+
+The mean of the sample means is 2.08 and sd of the sample means is 0.097. This 
+makes sense because you are just taking the a sample of the means and taking 
+the mean of that sample, so the mean should be around the original mean. The 
+sd should be close to 0 because the means should not vary too much.
+
+
+# Question 3 (10pt)
+
+## Question 3.1
+
+Download stock price data for 4 stocks of your choice from January 1, 2020 through August 31, 2022. (All chosen stocks must have price data for the entire time period.) Find the mean and standard deviation of the daily log returns for each stock in your data set.  
+
+## \textcolor{red}{Solution:}
+
+```{r}
+library(quantmod)
+getSymbols("AMZN", from = "2020-01-01", to = "2022-08-31", src = "yahoo")
+getSymbols("TSLA", from = "2020-01-01", to = "2022-08-31", src = "yahoo")
+getSymbols("AAPL", from = "2020-01-01", to = "2022-08-31", src = "yahoo")
+getSymbols("NVDA", from = "2020-01-01", to = "2022-08-31", src = "yahoo")
+amzn <- dailyReturn(AMZN$AMZN.Adjusted, type = "log")
+tsla <- dailyReturn(TSLA$TSLA.Adjusted, type = "log")
+aapl <- dailyReturn(AAPL$AAPL.Adjusted, type = "log")
+nvda <- dailyReturn(NVDA$NVDA.Adjusted, type = "log")
+
+# Mean and Std Dev. for Amazon Log Returns
+mean(amzn)
+sd(amzn)
+
+# Mean and Std Dev. for Tesla Log Returns
+mean(tsla)
+sd(tsla)
+
+# Mean and Std Dev. for Apple Log Returns
+mean(aapl)
+sd(aapl)
+
+# Mean and Std Dev. for Nvidia Log Returns
+mean(nvda)
+sd(nvda)
+```
+
+The Mean for Amazon Log Returns is 0.0004543789
+The Std. Dev for Amazon Log Returns is 0.02393036
+
+The Mean for Tesla Log Returns is 0.003383311
+The Std. Dev for Tesla Log Returns is 0.04585501
+
+The Mean for Apple Log Returns is 0.001145393
+The Std. Dev for Apple Log Returns is 0.02305476
+
+The Mean for Nvidia Log Returns is 0.001416233
+The Std. Dev for Nvidia Log Returns is 0.03494531
