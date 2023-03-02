@@ -1,0 +1,128 @@
+---
+output: pdf_document
+
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+```
+
+
+
+# QF112.  Homework #10.
+
+
+## `r format(Sys.time(), "%Y-%m-%d")`
+
+I pledge my honor that I have abided by the Stevens Honor System.
+
+By filling out the following fields, you are signing this pledge.  No assignment will get credit without being pledged.
+
+Name:
+
+CWID:
+
+Date:
+
+
+
+
+```{r}
+CWID = -1 #Place here your Campus wide ID number, this will personalize
+#your results, but still maintain the reproduceable nature of using seeds.
+#If you ever need to reset the seed in this assignment, use this as your seed
+#Papers that use -1 as this CWID variable will earn 0's so make sure you change
+#this value before you submit your work.
+personal = CWID %% 10000
+set.seed(personal)
+```
+
+It will be up to you to determine where you should use R code in this document.  You can easily add a new section of code by simply using copy/paste or typing it in yourself.  For your convenience, a blank section of code is provided below.
+
+```{r}
+# my response
+```
+
+# Question 1 
+
+We have the following observations from 5 different medicines for the number of hours of relief that each has provided. 
+
+A = 5.2, 4.7, 8.1, 6.2, 3.0
+B = 9.1, 7.1, 8.2, 6.0, 9.1
+C = 3.2, 5.8, 2.2, 3.1, 7.1
+D = 2.4, 3.4, 4.1, 1.0, 4.0
+E = 7.1, 6.6, 9.3, 4.2, 7.6
+
+## a)
+
+What are the between group variance and the within group variance?
+
+## b)
+
+Determine at the .05 level of significance whether the means are the same (assuming common variance, and that they are normall distributed).  Calculate this manually, and then again using either the anova or the aov command in R to check your results.
+
+# Question 2
+
+Pick one of your two assets from your csv file that you have been using this semester.  For that asset, pick 4 months (your call) and select 5 log returns from each of those months.  Assuming that these log returns have common variance, do you think that these months have the same mean for the log returns? (You can do this however you like, including using the R functions)
+
+# Question 3
+
+Using the "battery2.csv" data set, write code to answer the following:
+
+## a)
+
+What is the value of the total sum of squares (SST)?
+
+## b)
+
+What is the value of the error sum of squares (SSE)?
+
+## c) 
+
+What is the value of the treatment sum of squares (SSA)?
+
+## d)
+
+What is the value of the block sum of squares (SSB)?
+
+## e)
+
+What is the value of the interaction sum of squares (SSAB)?
+
+## f)
+
+Confirm that SST = SSA + SSB + SSAB + SSE
+
+# Question 4 (taken from Walpole, Myers, Myers, Ye)
+
+An experiment was performed to determine the effect of temperature and the type of oven for the life of a particular component.  They used 4 different types of ovens and three different temperatures and producded the following results. (go ahead and knit the file to see this clearly)
+
+\begin{tabular}{c c c c c}
+Temperature&$O_1$&$O_2$&$O_3$&$O_4$\\
+\hline
+500&227&214&225&260\\
+&221&259&236&229\\
+\hline
+550&187&181&232&246\\
+&208&179&198&273\\
+\hline
+600&174&198&178&206\\
+&202&194&213&219
+\end{tabular}
+
+Using a .05 level of significance, test the hypothesis (do this without the anova or aov commands)
+## a)
+
+that different temperatures have no effect
+
+## b)
+
+that different ovens have not effect
+
+## c)
+
+that the type of oven and temperature do not interact.
+
+## d)
+
+Run this through either the anova or aov command to check your results.
