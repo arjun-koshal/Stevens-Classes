@@ -1,0 +1,88 @@
+---
+output: pdf_document
+
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+```
+
+
+
+# QF112.  Homework #2.
+
+
+## `r format(Sys.time(), "%Y-%m-%d")`
+
+I pledge my honor that I have abided by the Stevens Honor System.
+
+By filling out the following fields, you are signing this pledge.  No assignment will get credit without being pledged.
+
+Name:
+
+CWID:
+
+Date:
+
+
+
+
+```{r}
+CWID = -1 #Place here your Campus wide ID number, this will personalize
+#your results, but still maintain the reproduceable nature of using seeds.
+#If you ever need to reset the seed in this assignment, use this as your seed
+#Papers that use -1 as this CWID variable will earn 0's so make sure you change
+#this value before you submit your work.
+personal = CWID %% 10000
+set.seed(personal)
+```
+
+It will be up to you to determine where you should use R code in this document.  You can easily add a new section of code by simply using copy/paste or typing it in yourself.  For your convenience, a blank section of code is provided below.
+
+```{r}
+# my response
+```
+
+# Question 1
+
+For this question, you will need to choose two assets and download the daily adjusted close for the last (calendar) year.  Save this data as a csv and then read it in as a data frame.  You will use this data to do the following:
+
+## a) 
+
+For each of your assets, find the sample mean and sample standard deviation of your data.
+
+## b)
+
+Create a histogram for each asset, showing each in its own plot. 
+
+## c)
+
+Create a box-plot for each asset
+
+## d)
+
+Determine the sample covariance and sample correlation coeffecient for these two assets.
+
+
+# Question 2 (Adapted from Stinerock: Statistics with R)
+
+Using the Cars93 data (which can be found in the MASS package)
+## a)
+Print out the variable names
+## b)
+For the Type variable, print out the frequency and relative frequency tables.  Using these tables, what percentage of the data set are large cars?
+## c)
+Create a cross-tabulation table of the variables Origin and Type.  Using this table, can you conclude that most of the vehicles are of US origin?
+
+
+
+# Question 3 (Adapted from Stinerock: Statistics with R)
+
+Using the LakeHuron data set (already in R), find the range, interquartile range, variance, standard deviation, and coeffecient of variation.
+
+
+
+
+
+
+

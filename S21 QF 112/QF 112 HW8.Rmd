@@ -1,0 +1,93 @@
+---
+output: pdf_document
+
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+```
+
+
+
+# QF112.  Homework #8.
+
+
+## `r format(Sys.time(), "%Y-%m-%d")`
+
+I pledge my honor that I have abided by the Stevens Honor System.
+
+By filling out the following fields, you are signing this pledge.  No assignment will get credit without being pledged.
+
+Name:
+
+CWID:
+
+Date:
+
+
+
+
+```{r}
+CWID = -1 #Place here your Campus wide ID number, this will personalize
+#your results, but still maintain the reproduceable nature of using seeds.
+#If you ever need to reset the seed in this assignment, use this as your seed
+#Papers that use -1 as this CWID variable will earn 0's so make sure you change
+#this value before you submit your work.
+personal = CWID %% 10000
+set.seed(personal)
+```
+
+It will be up to you to determine where you should use R code in this document.  You can easily add a new section of code by simply using copy/paste or typing it in yourself.  For your convenience, a blank section of code is provided below.
+
+```{r}
+# my response
+```
+
+# Question 1 (Adapted from Stinerock)
+
+For this problem and all the others in this homework assignment, you are not allowed to use any of the pre-built linear regression commands such as lm() unless specifically instructed to.  Using the "mtcars" data set in R (a pre-loaded data frame)
+```{r}
+?mtcars  #make sure you comment this out when you knit it as this makes knitting weird
+```
+For this problem, we're going to look at the relationship between "mtcars\$qsec", its quarter mile time and "mtcars\$hp", its gross horsepower.  We'll be using the gross horsepower as the independent variable.
+
+## a)
+
+Create a scatterplot of these two variables
+
+## b)
+
+Estimate the parameters for the regression line between these two variables
+
+## c)
+
+For this fit, what is your R-squared value?
+
+## d)
+
+Is this fit significant at the alpha=.05 level?
+
+## e)
+
+What is the p-value?
+
+
+# Question 2
+
+Using your data set of the two assets that we've been using this semester, perform the following operations.
+
+## a)
+
+Choose one of your variables to be the independent and one to be the dependent variables.  Create a second data frame that just consists of the first 6 months of data for both.  Using just this first six months, find the estimates for the linear relationship between these two assets.
+
+## b)
+
+Determine the R-squared value and determine the p-value for this fit.
+
+## c)
+
+Using the model that you determined in part a), for the latter six months of data, use the linear regression model to predict the dependent asset using the independent one.  Using these predictions (and of course the actual observed values of the dependent asset over this time period) calculate the R-squared.  How does this compare with the value you found in part b)?  If they are different, why might that be?
+
+
+
+

@@ -1,0 +1,90 @@
+---
+output: pdf_document
+
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+```
+
+
+
+# QF112.  Homework #9.
+
+
+## `r format(Sys.time(), "%Y-%m-%d")`
+
+I pledge my honor that I have abided by the Stevens Honor System.
+
+By filling out the following fields, you are signing this pledge.  No assignment will get credit without being pledged.
+
+Name:
+
+CWID:
+
+Date:
+
+
+
+
+```{r}
+CWID = -1 #Place here your Campus wide ID number, this will personalize
+#your results, but still maintain the reproduceable nature of using seeds.
+#If you ever need to reset the seed in this assignment, use this as your seed
+#Papers that use -1 as this CWID variable will earn 0's so make sure you change
+#this value before you submit your work.
+personal = CWID %% 10000
+set.seed(personal)
+```
+
+It will be up to you to determine where you should use R code in this document.  You can easily add a new section of code by simply using copy/paste or typing it in yourself.  For your convenience, a blank section of code is provided below.
+
+```{r}
+# my response
+```
+
+# Question 1 
+
+Install the ISLR package and load it into your R-session.  We'll be using the "Smarket" data set from this package for this problem.
+```{r}
+library(ISLR)
+?Smarket  #make sure you comment this out when you knit it as this makes knitting weird
+```
+For this problem, we're going to look at the relationship between "Today" and the "lagx" variables.  
+
+## a)
+
+Run a subset selection to determine which of the lag variables will give you the best model for predicting the value of "Today".  
+
+## b)
+
+Plot the adjust R-squared for the number of predictors and use this to determine which is the best model.  Which model did it choose?
+
+
+
+
+
+
+# Question 2
+
+Using your data set of the two assets that we've been using this semester, perform the following operations.  Choose one of your variables to be the independent and one to be the dependent variables.  Randomly split your data into two approximately equal pieces, which we'll label the training data and the testing data.
+
+## a)
+
+Using the training data, fit a linear regression model between these two variables.  Using this model, calculate the mean squared error using the test data.
+
+## b)
+
+Next, fit a linear regression model using up to order 8 of the independent variables (up to price^8, you can do this with the poly() command in R).  Again, calculate the mean squared error using the test data.
+
+## c)
+
+Apply subset selection (your choice of best, forward, or backward) for the linear regression model from part b) with the criteria of the adjusted R-squared.  Which subset of these powers gives you the best fit?  Using the optimal model, calculate the mean squared error of your test data.
+
+## d)
+
+Compare the MSE's from each part.  What conclusions can you form based on these values?
+
+
+
+

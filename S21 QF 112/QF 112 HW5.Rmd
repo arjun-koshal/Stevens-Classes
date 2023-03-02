@@ -1,0 +1,107 @@
+---
+output: pdf_document
+
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+```
+
+
+
+# QF112.  Homework #5.
+
+
+## `r format(Sys.time(), "%Y-%m-%d")`
+
+I pledge my honor that I have abided by the Stevens Honor System.
+
+By filling out the following fields, you are signing this pledge.  No assignment will get credit without being pledged.
+
+Name:
+
+CWID:
+
+Date:
+
+
+
+
+```{r}
+CWID = -1 #Place here your Campus wide ID number, this will personalize
+#your results, but still maintain the reproduceable nature of using seeds.
+#If you ever need to reset the seed in this assignment, use this as your seed
+#Papers that use -1 as this CWID variable will earn 0's so make sure you change
+#this value before you submit your work.
+personal = CWID %% 10000
+set.seed(personal)
+```
+
+It will be up to you to determine where you should use R code in this document.  You can easily add a new section of code by simply using copy/paste or typing it in yourself.  For your convenience, a blank section of code is provided below.
+
+```{r}
+# my response
+```
+
+# Question 1 
+
+For this problem, you will be using your previous data set of the two assets that you downloaded.
+
+## a)
+
+For the first asset, determine the 60%, 90%, and 95% confidence intervals for the population mean of the adjusted close prices.
+
+## b)
+
+
+For the first asset, restrict your data set to just the most recent two weeks.  Use only this data to determine the 60%, 90%, and 95% confidence intervals for the population mean of the adjusted close prices.
+
+## c)
+
+For the second asset, determine the 60%, 90%, and 95% confidence intervals for the population variance.
+
+## d)
+
+After converting your second asset to the log returns (if you had this wrong on a previous homework, please reach out to see how to fix it), determine the confidence intervals of the population variance of these log-returns at the 60%, 90%, and 95% levels.
+
+# Question 2 (Adapted from Stinerock)
+
+A study of 450 families found that 212 out of the had to cut back recently on the purchase of big-ticket items over the past 6 months.
+
+## a)
+
+What is the 90% confidence interval estimate of the population proportion $p$ of the households that are cutting back?
+
+## b)
+
+What sample size would you recommend to achieve a margin of error of .03?
+
+## c)
+
+How large a sample size would be required to achieve a 99% confidence intervalestimate of $p$ with a margin of error of .03?
+
+## d)
+
+How large a sample size would be required to achieve a 99% confidence interval estimate of $p$ with a margin of error of .025?
+
+# Question 3 (Taken from Mathematical Statistics and Data Analysis by John Rice)
+
+Answer whether the following are true or false and why.  Note that the why part is also very important
+
+# a)
+
+The center of a 95% confidence interval for the population mean is a random variable
+
+# b) 
+
+A 95% confidence interval for $\mu$ contains the sample mean with probability .95
+
+# c)
+
+A 95% confidence interval contains 95% of the population
+
+# d)
+
+Out of one hunderd 95% confidence intervals for $\mu$, 95 will contain $\mu$.
+
+

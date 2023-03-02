@@ -1,0 +1,74 @@
+---
+output: pdf_document
+
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+```
+
+
+
+# QF112.  Homework #1.
+
+
+## `r format(Sys.time(), "%Y-%m-%d")`
+
+I pledge on my honor that I have not given or received any unauthorized assistance on this assignment/examination. I further pledge that I have not copied any material from a book, article, the Internet or any other source except where I have expressly cited the source.
+
+By filling out the following fields, you are signing this pledge.  No assignment will get credit without being pledged.
+
+Name:
+
+CWID:
+
+Date:
+
+
+
+
+```{r}
+CWID = -1 #Place here your Campus wide ID number, this will personalize
+#your results, but still maintain the reproduceable nature of using seeds.
+#If you ever need to reset the seed in this assignment, use this as your seed
+#Papers that use -1 as this CWID variable will earn 0's so make sure you change
+#this value before you submit your work.
+personal = CWID %% 10000
+set.seed(personal)
+```
+# Question 1
+
+Use R to calculate the square root of 30
+
+
+
+```{r}
+#response
+```
+
+
+# Question 2
+
+What is 34.6 multiplied by 23.5
+
+```{r}
+# my response
+```
+
+# Question 3
+
+Create a vector of the first 10 elements of the Fibonacci sequence, starting with 0
+
+```{r}
+# my response
+```
+
+# Question 4
+
+Create a data frame consisting of the first 10 elements of the Fibonacci sequence as well as their index in the sequence.  Name the columns appropriately.
+
+```{r}
+# my response
+```
+
+

@@ -1,0 +1,105 @@
+---
+output: pdf_document
+
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+```
+
+
+
+# QF112.  Homework #6.
+
+
+## `r format(Sys.time(), "%Y-%m-%d")`
+
+I pledge my honor that I have abided by the Stevens Honor System.
+
+By filling out the following fields, you are signing this pledge.  No assignment will get credit without being pledged.
+
+Name:
+
+CWID:
+
+Date:
+
+
+
+
+```{r}
+CWID = -1 #Place here your Campus wide ID number, this will personalize
+#your results, but still maintain the reproduceable nature of using seeds.
+#If you ever need to reset the seed in this assignment, use this as your seed
+#Papers that use -1 as this CWID variable will earn 0's so make sure you change
+#this value before you submit your work.
+personal = CWID %% 10000
+set.seed(personal)
+```
+
+It will be up to you to determine where you should use R code in this document.  You can easily add a new section of code by simply using copy/paste or typing it in yourself.  For your convenience, a blank section of code is provided below.
+
+```{r}
+# my response
+```
+
+# Question 1 (Taken from Stinerock)
+
+In a recent consumer confidence survey of 400 adults, 54 of 200 men and 36 of 200 women expressed agreement with the statement, "I would have trouble paying an unexpected bill of 1000 dollars without borrowing from someone or selling something."
+
+## a)  Do men and women differ on their answer to this question?  Answer at the .05 level of significance. 
+
+## b)  What is the p-value?
+
+# Question 2 (adapted from Walpole, Myers, Myers, and Ye)
+
+The running times in minutes for films produced by two companies are as follows:
+
+For company A: 103, 94, 110, 87, 98
+For company B: 97, 82, 123, 92, 175, 88, 118
+
+## a)
+
+Compute the $90\%$ confidence interval for the differences between the average running times of the films.  (Assume approximately normally distributed)
+
+## b)
+
+Construct a $90\%$ confidence interval for $\sigma_A/\sigma_B$ where $\sigma_A$ and $\sigma_B$ are the respective population standard deviations of the running times of the respective companies.
+
+# Question 3 (adapted from WMMY)
+
+Two professors give their students exams, and record the length of time it takes the students to finish.  The results are below
+
+Professor 1:  102, 86, 98, 109, 92
+Professor 2:  81, 165, 97, 134, 92, 87, 114
+
+## a)
+
+Test the statement that the students in Professor 2's class took over ten minutes longer than in Professor 1's class.  Use a .1 level of significance.
+
+## b)
+
+Test at the .05 significance level whether these student times have different variances.
+
+# Question 4
+
+Using your two stocks that you've been working with, answer the following.  For each question, calculate the p-value and then use it to determine at what level of significance you'd be able to reject the null hypothesis.  Is this level one that you would personally feel is meaningful?
+
+## a)
+
+Look at the daily difference between the two stocks for the first 15 days.  Is this significantly different from the current difference between the value of the two stocks?
+(Hint: this is paired data that you'll run against the difference of the two stocks at the time of completing this assignment)
+
+## b)
+
+Do the differences between the two stocks for the first 15 days differ from the differences between the stocks for the last 15 days? 
+
+## b)
+
+For the entire year, do the two stocks have the same variance?
+
+## c)
+
+For each stock (so answer this question for each asset individually), are the simple returns for the first 25 days different from the simple returns from the last 25 days?
+
+

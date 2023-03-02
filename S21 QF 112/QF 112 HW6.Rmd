@@ -1,0 +1,85 @@
+---
+output: pdf_document
+
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+```
+
+
+
+# QF112.  Homework #6.
+
+
+## `r format(Sys.time(), "%Y-%m-%d")`
+
+I pledge my honor that I have abided by the Stevens Honor System.
+
+By filling out the following fields, you are signing this pledge.  No assignment will get credit without being pledged.
+
+Name:
+
+CWID:
+
+Date:
+
+
+
+
+```{r}
+CWID = -1 #Place here your Campus wide ID number, this will personalize
+#your results, but still maintain the reproduceable nature of using seeds.
+#If you ever need to reset the seed in this assignment, use this as your seed
+#Papers that use -1 as this CWID variable will earn 0's so make sure you change
+#this value before you submit your work.
+personal = CWID %% 10000
+set.seed(personal)
+```
+
+It will be up to you to determine where you should use R code in this document.  You can easily add a new section of code by simply using copy/paste or typing it in yourself.  For your convenience, a blank section of code is provided below.
+
+```{r}
+# my response
+```
+
+# Question 1 
+
+For this problem, you will be using your previous data set of the two assets that you downloaded.
+
+## a)
+
+Do these assets have a net day to day increase the majority of the time?  Choose your own significance level that you feel will be relevant for this question.
+
+## b)
+
+Is the standard deviation of the simple returns for each asset greater than .015?  Again choose a level of significance that you feel is relevant.
+
+
+
+
+# Question 2 (Adapted from Stinerock)
+
+Doctors in Tampa reportedly earn an average salary of 141,300 dollars.  We conduct a survey of doctors in New Orleans with a sample of size $n=64$ to test whether their mean salary is different from that in Tampa and get the result that our sample mean is 138,000 dollars.
+
+## a)
+
+If we assume that $\sigma=18,000$, at the level of $\alpha=.01$ use the six-step framework to test whether the true mean in New Orleans is different from that of Tampa.
+
+## b)
+
+What is the $p$-value?
+
+## c)
+
+If we assume that $\sigma=18,000$, at the level of $\alpha=.01$ use the six-step framework to test whether the true mean in New Orleans is less than that of Tampa.
+
+## d)
+
+If the true mean in New Orleans is actually 139,000 dollars, what is the $\beta$ of this test?
+
+# Question 3 (Adapted from Probability and Statistics for Engineers and Scientest by Walpole Myers Myers and Ye)
+
+Based on past experiences, a professor believes that the time that it takes students to complete a test is a random variable with mean 35 minutes.  If a random sample of 20 students is taken that has a sample average time of 33.1 minutes with standard deviation 4.3, at the .05 significance level, should the professor determine that the true mean is actually less than the 35?
+
+
