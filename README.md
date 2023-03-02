@@ -17,7 +17,7 @@ This repository serves as a record for all courses I have taken at [Stevens Inst
 - MA 230 - Multivariate Calc & Optimization
 - QF 102 - Intro to Quantitative Finance II
 - QF 103 - Intro. to Financial Tools & Technology
-- QF 112 - Statistics Quantitative Finance
+- QF 112 - Statistics in Quantitative Finance
 
 ### Semester 3: Fall 2021 (18 Credits)
 - BT 290 - Business Career Seminar
