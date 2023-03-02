@@ -8,7 +8,7 @@ This repository serves as a record for all courses I have taken at [Stevens Inst
 - CS 110 - Creative Prob Solving in Computing
 - CAL 103 - Writing & Communications Collqm
 - MA 124 - Calculus of Two Variables
-- MA 232 - Linear Algebra
+- MA 232 - [Linear Algebra](https://github.com/arjun-koshal/Stevens-Classes/tree/main/F20%20MA%20232)
 
 ### Semester 2: Spring 2021 (20 Credits)
 - BT 436 - Game Theory
