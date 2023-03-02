@@ -53,6 +53,20 @@ This repository serves as a record for all courses I have taken at [Stevens Inst
 - MA 346 - Numerical Methods
 - PEP 221 - Physics Lab I for Scientists
 
+### Future Courses
+
+### Semester 7: Fall 2023 (TBD Credits)
+- CS 559 - Machine Learning: Fundamentals and Applications
+- MGT 411 - Senior Design I
+- MA 498 - Senior Research Project I
+- ENGR 234 - Thermodynamics
+- FIN 510 - Financial Statement Analysis
+
+### Semester 8: Spring 2024 (TBD Credits)
+- CS 583 - Deep Learning
+- MGT 412 - Senior Design II
+- MA 499 - Senior Research Project II
+
 ## Transfer Credits
 
 ### Advanced Placement Credits (19 Credits)
